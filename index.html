@@ -367,12 +367,13 @@
                         <div class="bg-white p-4 rounded-xl border-2 border-purple-200 text-[11px] leading-relaxed">
                             <span class="font-bold text-purple-700 block mb-2 border-b border-purple-200 pb-1 flex items-center gap-1">
                                 <i data-lucide="gift" class="w-3.5 h-3.5"></i>
-                                Premios de Agradecimiento:
+                                Premio de Agradecimiento:
                             </span>
                             <div class="flex flex-col gap-1 text-gray-700 font-semibold">
-                                <div><span class="text-pink-500">1er Premio:</span> Canasta de Alimentos Premium</div>
-                                <div><span class="text-purple-500">2do Premio:</span> Gift Card de $50</div>
-                                <div><span class="text-indigo-500">3er Premio:</span> Caja de Chocolates Artesanales</div>
+                                <div class="flex items-center gap-2 p-2 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg border border-purple-200">
+                                    <span class="text-pink-500 font-bold">🏆 Premio Único:</span>
+                                    <span class="text-purple-700 font-extrabold">$100 a Tasa Euro del Día</span>
+                                </div>
                             </div>
                         </div>
 
@@ -450,7 +451,7 @@
                     </div>
                     <div class="bg-gradient-to-br from-purple-100 to-indigo-100 border-2 border-purple-300 py-3 rounded-xl text-center shadow-sm">
                         <span class="text-[10px] text-purple-600 font-bold block uppercase">Aporte</span>
-                        <span id="share-card-price" class="text-2xl font-bold text-purple-600">$60</span>
+                        <span id="share-card-price" class="text-2xl font-bold text-purple-600">$5</span>
                     </div>
                 </div>
             </div>
@@ -474,8 +475,8 @@
                 </div>
                 <div class="border-t-2 border-purple-200 pt-4 flex justify-between items-center text-gray-600 text-xs">
                     <div>
-                        <span class="block text-[10px] uppercase font-bold text-purple-400 text-left">Premios</span>
-                        <span class="font-bold text-gray-800 text-left block">Canasta • Gift Card • Chocolates</span>
+                        <span class="block text-[10px] uppercase font-bold text-purple-400 text-left">Premio</span>
+                        <span class="font-bold text-gray-800 text-left block">🏆 $100 a Tasa Euro del Día</span>
                     </div>
                     <div class="text-right">
                         <span class="block text-[10px] uppercase font-bold text-purple-400">¿Quieres ayudar?</span>
@@ -575,7 +576,7 @@
         let config = {
             raffleName: "Ayuda para Gastroscopia",
             raffleDate: "Sábado 21 de Junio",
-            defaultPrice: 60
+            defaultPrice: 5
         };
 
         let tickets = {};
@@ -657,7 +658,7 @@
             if (storedTickets) {
                 tickets = JSON.parse(storedTickets);
                 
-                Object.keys(tickets).forEach(k => {
+                Object.keys(tickets).forEach(function(k) {
                     if (!tickets[k].numbers) {
                         tickets[k].numbers = [tickets[k].number || k];
                     }
@@ -698,7 +699,7 @@
                     }
                     button.onclick = function() {
                         showTicketPreview(tickets[numStr]);
-                        showNotice('Número Ocupado', `El número ${numStr} fue elegido por ${tickets[numStr].buyerName}. Estado: ${status.toUpperCase()}`, 'info');
+                        showNotice('Número Ocupado', 'El número ' + numStr + ' fue elegido por ' + tickets[numStr].buyerName + '. Estado: ' + status.toUpperCase(), 'info');
                     };
                 } else if (isSelected) {
                     button.className += ' bg-gradient-to-br from-purple-400 to-pink-400 text-white border-purple-300 scale-105 shadow-lg shadow-purple-200/50';
@@ -748,7 +749,7 @@
 
         function getUniqueTickets() {
             const uniqueMap = {};
-            Object.values(tickets).forEach(tk => {
+            Object.values(tickets).forEach(function(tk) {
                 uniqueMap[tk.id] = tk;
             });
             return Object.values(uniqueMap);
@@ -762,7 +763,7 @@
             let totalCollected = 0;
             let totalReceivable = 0;
 
-            getUniqueTickets().forEach(tk => {
+            getUniqueTickets().forEach(function(tk) {
                 const price = parseFloat(tk.price || 0);
                 const status = tk.paymentStatus || 'pendiente';
                 if (status === 'pagado') {
@@ -842,7 +843,7 @@
                 paymentStatus: paymentStatus
             };
 
-            arrSelected.forEach(num => {
+            arrSelected.forEach(function(num) {
                 tickets[num] = purchaseTicket;
             });
 
@@ -873,7 +874,7 @@
             const container = document.getElementById('ticket-numbers-display-container');
             container.innerHTML = '';
             
-            ticketData.numbers.forEach(n => {
+            ticketData.numbers.forEach(function(n) {
                 const circle = document.createElement('span');
                 circle.className = 'w-8 h-8 rounded-full bg-gradient-to-br from-purple-200 to-pink-200 text-purple-700 border-2 border-purple-300 flex items-center justify-center font-bold text-xs shadow-sm';
                 circle.textContent = n;
@@ -895,7 +896,7 @@
 
         function togglePaymentStatus(ticketId) {
             const uniqueTks = getUniqueTickets();
-            const tk = uniqueTks.find(t => t.id === ticketId);
+            const tk = uniqueTks.find(function(t) { return t.id === ticketId; });
             if (tk) {
                 const nextStatus = tk.paymentStatus === 'pagado' ? 'pendiente' : 'pagado';
                 tk.paymentStatus = nextStatus;
@@ -915,13 +916,13 @@
 
         function deleteTicketConfirm(ticketId) {
             const uniqueTks = getUniqueTickets();
-            const tk = uniqueTks.find(t => t.id === ticketId);
+            const tk = uniqueTks.find(function(t) { return t.id === ticketId; });
             if (tk) {
                 showConfirmDialog(
                     'Eliminar Colaboración',
                     '¿Estás seguro de eliminar el aporte de ' + tk.buyerName + ' por los números (' + tk.numbers.join(', ') + ')? Los números quedarán libres nuevamente.',
                     function() {
-                        tk.numbers.forEach(n => {
+                        tk.numbers.forEach(function(n) {
                             delete tickets[n];
                         });
                         
@@ -956,7 +957,7 @@
                     const filename = 'Comprobante_' + cleanName + '.png';
                     const file = new File([blob], filename, { type: 'image/png' });
 
-                    const shareText = '💜 ¡Gracias por tu apoyo en la Rifa Solidaria!\n👤 Colaborador: ' + buyer + '\n💰 Aporte: ' + document.getElementById('ticket-price-val').textContent + '\n\n¡Juntos podemos ayudar!';
+                    const shareText = '💜 ¡Gracias por tu apoyo en la Rifa Solidaria!\n👤 Colaborador: ' + buyer + '\n💰 Aporte: ' + document.getElementById('ticket-price-val').textContent + '\n🏆 Premio: $100 a Tasa Euro del Día\n\n¡Juntos podemos ayudar!';
 
                     if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                         navigator.share({
@@ -1053,7 +1054,7 @@
                     canvas.toBlob(function(blob) {
                         const filename = 'Tablero_Rifa_Solidaria.png';
                         const file = new File([blob], filename, { type: 'image/png' });
-                        const shareText = '💜 ¡Rifa Solidaria Activa: ' + config.raffleName + '! 💜\n\n🎯 Números disponibles: ' + (100 - totalSold) + '\n💰 Valor del número: $' + config.defaultPrice + '\n\n¡Tu aporte puede hacer la diferencia! Elige tus números y ayúdanos a cumplir esta causa. 🙏';
+                        const shareText = '💜 ¡Rifa Solidaria Activa: ' + config.raffleName + '! 💜\n\n🏆 PREMIO: $100 a Tasa Euro del Día\n💵 Tu aporte: $' + config.defaultPrice + ' (Tasa Euro del Día)\n🎯 Números disponibles: ' + (100 - totalSold) + '\n\n¡Tu aporte puede hacer la diferencia! Elige tus números y ayúdanos a cumplir esta causa. 🙏';
 
                         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                             navigator.share({
@@ -1078,7 +1079,7 @@
             const historyCountSpan = document.getElementById('sales-history-count');
             tbody.innerHTML = '';
 
-            const activeTickets = getUniqueTickets().sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+            const activeTickets = getUniqueTickets().sort(function(a, b) { return b.timestamp.localeCompare(a.timestamp); });
             historyCountSpan.textContent = activeTickets.length + ' Aportes';
 
             if (activeTickets.length === 0) {
@@ -1086,14 +1087,14 @@
                 return;
             }
 
-            activeTickets.forEach(tk => {
+            activeTickets.forEach(function(tk) {
                 const row = document.createElement('tr');
                 row.className = 'hover:bg-purple-50/50 transition text-xs sm:text-sm';
                 
                 const status = tk.paymentStatus || 'pendiente';
                 const isPaid = status === 'pagado';
                 
-                row.innerHTML = '<td class="p-3"><div class="flex flex-wrap gap-1 max-w-[140px]">' + tk.numbers.map(n => '<span class="px-2 py-1 rounded-lg font-mono font-bold text-[11px] ' + (isPaid ? 'bg-gradient-to-br from-emerald-100 to-green-100 text-emerald-700 border border-emerald-300' : 'bg-gradient-to-br from-amber-100 to-yellow-100 text-amber-700 border border-amber-300') + '">' + n + '</span>').join('') + '</div></td><td class="p-3"><div class="font-semibold text-gray-700">' + tk.buyerName + '</div><div class="text-[10px] text-purple-400">' + tk.contact + '</div></td><td class="p-3"><div class="font-semibold text-gray-800">$' + parseFloat(tk.price).toFixed(2) + '</div><button onclick="togglePaymentStatus(\'' + tk.id + '\')" class="mt-1 flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full transition ' + (isPaid ? 'bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-700 border border-emerald-300 hover:from-emerald-200 hover:to-green-200' : 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 border border-amber-300 hover:from-amber-200 hover:to-yellow-200') + '"><span class="w-1.5 h-1.5 rounded-full ' + (isPaid ? 'bg-emerald-500' : 'bg-amber-500') + '"></span><span>' + (isPaid ? 'Recibido' : 'Pendiente') + '</span></button></td><td class="p-3 text-right"><div class="flex justify-end gap-1.5"><button onclick="viewHistoryTicket(\'' + tk.numbers[0] + '\')" class="p-1.5 text-purple-400 hover:text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-lg transition" title="Ver Comprobante"><i data-lucide="eye" class="w-3.5 h-3.5"></i></button><button onclick="deleteTicketConfirm(\'' + tk.id + '\')" class="p-1.5 text-pink-400 hover:text-pink-600 bg-pink-50 hover:bg-pink-100 rounded-lg transition" title="Eliminar Aporte"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></td>';
+                row.innerHTML = '<td class="p-3"><div class="flex flex-wrap gap-1 max-w-[140px]">' + tk.numbers.map(function(n) { return '<span class="px-2 py-1 rounded-lg font-mono font-bold text-[11px] ' + (isPaid ? 'bg-gradient-to-br from-emerald-100 to-green-100 text-emerald-700 border border-emerald-300' : 'bg-gradient-to-br from-amber-100 to-yellow-100 text-amber-700 border border-amber-300') + '">' + n + '</span>'; }).join('') + '</div></td><td class="p-3"><div class="font-semibold text-gray-700">' + tk.buyerName + '</div><div class="text-[10px] text-purple-400">' + tk.contact + '</div></td><td class="p-3"><div class="font-semibold text-gray-800">$' + parseFloat(tk.price).toFixed(2) + '</div><button onclick="togglePaymentStatus(\'' + tk.id + '\')" class="mt-1 flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full transition ' + (isPaid ? 'bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-700 border border-emerald-300 hover:from-emerald-200 hover:to-green-200' : 'bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 border border-amber-300 hover:from-amber-200 hover:to-yellow-200') + '"><span class="w-1.5 h-1.5 rounded-full ' + (isPaid ? 'bg-emerald-500' : 'bg-amber-500') + '"></span><span>' + (isPaid ? 'Recibido' : 'Pendiente') + '</span></button></td><td class="p-3 text-right"><div class="flex justify-end gap-1.5"><button onclick="viewHistoryTicket(\'' + tk.numbers[0] + '\')" class="p-1.5 text-purple-400 hover:text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-lg transition" title="Ver Comprobante"><i data-lucide="eye" class="w-3.5 h-3.5"></i></button><button onclick="deleteTicketConfirm(\'' + tk.id + '\')" class="p-1.5 text-pink-400 hover:text-pink-600 bg-pink-50 hover:bg-pink-100 rounded-lg transition" title="Eliminar Aporte"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></td>';
                 
                 tbody.appendChild(row);
             });
@@ -1152,7 +1153,7 @@
                     config = {
                         raffleName: 'Ayuda para Gastroscopia',
                         raffleDate: 'Sábado 21 de Junio',
-                        defaultPrice: 60
+                        defaultPrice: 5
                     };
                     tickets = {};
                     selectedNumbers.clear();
