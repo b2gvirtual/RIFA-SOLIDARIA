@@ -380,7 +380,7 @@
                         <div class="flex items-center justify-between border-t-2 border-purple-200 pt-3 text-[9px] text-purple-400 mt-1">
                             <div>
                                 <span class="block font-semibold">Código de Control:</span>
-                                <span id="ticket-control-code" class="font-mono font-bold text-gray-700 text-xs">CTRL-XXXXXX</span>
+                                <span id="ticket-control-code" class="font-mono font-bold text-gray-700 text-xs">CTRL-XXXX</span>
                             </div>
                             <div class="text-right">
                                 <span class="block font-semibold" id="ticket-timestamp-val">05/06/2026 00:00 AM</span>
@@ -562,7 +562,7 @@
                 <p id="notice-message" class="text-sm text-gray-600">Mensaje</p>
             </div>
             <button onclick="closeNoticeModal()" class="w-full py-2.5 bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white text-sm font-bold rounded-xl transition shadow-md soft-hover">
-                Entendido
+                Cerrar
             </button>
         </div>
     </div>
@@ -822,8 +822,12 @@
                 return;
             }
 
+            // Extraer últimos 4 dígitos del teléfono para el código de control
+            const phoneDigits = contact.replace(/\D/g, '');
+            const lastFourDigits = phoneDigits.slice(-4);
+            const controlCode = 'CTRL-' + (lastFourDigits || '0000');
+
             const ticketId = 'TK-' + Date.now();
-            const controlCode = 'CTRL-' + Math.random().toString(36).substr(2, 6).toUpperCase();
             
             const now = new Date();
             const formattedDate = now.toLocaleDateString('es-ES', {
